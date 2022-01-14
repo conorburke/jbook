@@ -1,12 +1,4 @@
 import * as esbuild from 'esbuild-wasm';
-
-
-// (async() => {
-//     await fileCache.setItem('color', 'rojo');
-
-//     const color = await fileCache.getItem('color');
-//     console.log('color', color);
-// })()
  
 export const unpkgPathPlugin = () => {
     return {
@@ -31,33 +23,11 @@ export const unpkgPathPlugin = () => {
             // namespace can be used to apply onLoad to specified onResolve outputs with a namespace
             // handle root file of module or anything else        
             build.onResolve({ filter: /.*/ }, async (args: any) => {
-                // console.log('onResolve', args);
-                // if (args.path === 'index.js') {
-                //     return { path: args.path, namespace: 'a' };
-                // }
-                // else if (args.path === 'tiny-test-pkg') {
-                //     return { path: 'https://unpkg.com/tiny-test-pkg@1.0.0/index.js', namespace: 'a'}
-                // }
-
-
-                // if (args.path.includes('./') || (args.path.includes('../'))) {
-                //     return {
-                //         namespace: 'a',
-                //         // path: new URL(args.path, args.importer + '/').href
-                //         path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/').href
-                //     }
-                // }
-
                 return {
                     namespace: 'a',
                     path: `https://unpkg.com/${args.path}`
                 }
-                
-
-                // return { path: args.path, namespace: 'a' };
             });
- 
-            
         },
     };
 };
