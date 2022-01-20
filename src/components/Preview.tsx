@@ -29,7 +29,7 @@ const html = `
                     })
 
                     window.addEventListener('message', (event) => {
-                        console.log(event.data);
+                        // console.log(event.data);
                         try {
                             eval(event.data);
                         } catch (err) {
