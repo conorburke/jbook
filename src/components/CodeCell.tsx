@@ -3,9 +3,18 @@ import CodeEditor from './CodeEditor';
 import Preview from './Preview';
 import BundlerService from '../bundler';
 import Resizable from './Resizable';
+import { Cell } from '../state/types';
+import { useActions } from '../hooks/use-actions';
 
-const CodeCell = () => {
-    const [input, setInput] = useState('');
+interface CodeCellProps {
+    cell: Cell
+}
+
+// destructe 'cell' from props.cell
+const CodeCell: React.FC<CodeCellProps> = ({ cell } ) => {
+    // extracted this local state to redux
+    // const [input, setInput] = useState('');
+    const { updateCell } = useActions();
     const [code, setCode] = useState('');
     const [err, setErr] = useState('');
 
@@ -16,7 +25,8 @@ const CodeCell = () => {
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const output = await BundlerService(input);
+            // const output = await BundlerService(input);
+            const output = await BundlerService(cell.content);
             setCode(output.code);
             setErr(output.err);
         }, 1000);
@@ -24,16 +34,19 @@ const CodeCell = () => {
         return () => {
             clearTimeout(timer);
         }
-    }, [input]);
-    
+    // }, [input]);
+    }, [cell.content]);
+        
 
     return (
         <Resizable direction='vertical'>
-            <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
+            <div style={{ height: 'calc(100% - 10px)', display: 'flex', flexDirection: 'row' }}>
                 <Resizable direction='horizontal'>
                     <CodeEditor 
-                        initialValue='//Happy editing' 
-                        onChange={(value) => setInput(value)}
+                        // initialValue='//Happy editing' 
+                        initialValue={cell.content} 
+                        // onChange={(value) => setInput(value)}
+                        onChange={(value) => updateCell(cell.id, value)}
                     />
                 </Resizable>
                 
