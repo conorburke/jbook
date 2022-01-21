@@ -6,6 +6,7 @@ import Resizable from './Resizable';
 import { Cell } from '../state/types';
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector';
+import { useCumulativeCode } from '../hooks/use-cumulative-code';
 
 interface CodeCellProps {
     cell: Cell
@@ -20,6 +21,9 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell } ) => {
     // const [err, setErr] = useState('');
     
     const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+    const cumulativeCode = useCumulativeCode(cell.id);
+   
+    // console.log(cumulativeCode);
     // console.log(bundle);
 
     // const onClick = async () => {
@@ -30,7 +34,8 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell } ) => {
     useEffect(() => {
 
         if (!bundle) {
-            createBundle(cell.id, cell.content);
+            // createBundle(cell.id, cell.content);
+            createBundle(cell.id, cumulativeCode);
             return;
         }
 
@@ -39,7 +44,8 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell } ) => {
             // const output = await BundlerService(cell.content);
             // setCode(output.code);
             // setErr(output.err);
-            createBundle(cell.id, cell.content);
+            // createBundle(cell.id, cell.content);
+            createBundle(cell.id, cumulativeCode);
         }, 1000);
 
         return () => {
@@ -47,7 +53,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell } ) => {
         }
     // }, [input]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cell.content, cell.id, createBundle]);
+    }, [cumulativeCode, cell.id, createBundle]);
         
 
     return (
